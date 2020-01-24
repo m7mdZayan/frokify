@@ -1,3 +1,3 @@
 console.log("test");
 
-export default 400000;
+export default "i am x from module test";
