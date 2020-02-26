@@ -10,9 +10,12 @@
 //     ]
 //   ]
 // }
+
+/*
 {
   "presets": ["@babel/preset-env", "@babel/preset-react"]
 }
+*/
 
 // {
 //   "presets": [
@@ -20,3 +23,18 @@
 //     "@babel/preset-react"
 //   ]
 // }
+
+{
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "useBuiltIns": "usage",
+        "corejs": "3",
+        "targets": {
+          "browsers": ["last 5 versions", "ie >= 8"]
+        }
+      }
+    ]
+  ]
+}
