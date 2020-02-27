@@ -11,3 +11,12 @@ console.log(add(1, 18));
 console.log(multiply(1, 2));
 
 console.log(ids);
+
+async function getResults(query) {
+  const res = await axios(
+    `https://forkify-api.herokuapp.com/api/search?&q=${query}`
+  );
+  console.log(res);
+}
+
+getResults("pizza");
