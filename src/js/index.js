@@ -3,6 +3,7 @@
 import Search from "./models/Search";
 import * as searchView from "./views/searchView";
 import { elements, renderLoader, clearLoader } from "./views/base";
+import Recipe from "./models/Recipe";
 
 /** Global app state
  * -Search object
@@ -12,6 +13,7 @@ import { elements, renderLoader, clearLoader } from "./views/base";
  */
 const state = {};
 
+/**Search Controller */
 const controlSearch = async () => {
   // 1) get the query from the search view
   const query = searchView.getInput();
@@ -48,3 +50,8 @@ elements.searchresPages.addEventListener("click", e => {
     searchView.renderRecipes(state.search.result, goToPage);
   }
 });
+
+/**Recipe Controller */
+let r = new Recipe(47746);
+r.getRecipe();
+console.log(r);
