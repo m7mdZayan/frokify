@@ -2,6 +2,7 @@
 
 import Search from "./models/Search";
 import * as searchView from "./views/searchView";
+import * as recipeView from "./views/recipeView";
 import { elements, renderLoader, clearLoader } from "./views/base";
 import Recipe from "./models/Recipe";
 
@@ -27,21 +28,27 @@ const controlSearch = async () => {
     searchView.clearResults();
     renderLoader(elements.searchRes);
 
-    // 4) search for the results
-    await state.search.getResults();
+    try {
+      // 4) search for the results
+      await state.search.getResults();
 
-    // 5) render results on the ui
-    clearLoader();
-    searchView.renderRecipes(state.search.result);
+      // 5) render results on the ui
+      clearLoader();
+      searchView.renderRecipes(state.search.result);
+    } catch (err) {
+      console(err);
+      alert("Something went wrong");
+      clearLoader();
+    }
   }
 };
 
-elements.searchForm.addEventListener("submit", e => {
+elements.searchForm.addEventListener("submit", (e) => {
   e.preventDefault();
   controlSearch();
 });
 
-elements.searchresPages.addEventListener("click", e => {
+elements.searchresPages.addEventListener("click", (e) => {
   const btn = e.target.closest(".btn-inline");
   if (btn) {
     const goToPage = +btn.dataset.goto;
@@ -52,6 +59,54 @@ elements.searchresPages.addEventListener("click", e => {
 });
 
 /**Recipe Controller */
-let r = new Recipe(47746);
-r.getRecipe();
-console.log(r);
+
+const controlRecipe = async () => {
+  const id = window.location.hash.replace("#", "");
+
+  if (id) {
+    // Prepare ui for changes
+    recipeView.clearRecipe();
+    renderLoader(elements.recipe);
+
+    // highlight selectes search recipe
+    if (state.search) {
+      searchView.highlightSelected(id);
+    }
+
+    //Create new recipe object
+    state.recipe = new Recipe(id);
+
+    try {
+      //Get recipe data & parse ingredients
+      await state.recipe.getRecipe();
+      state.recipe.parseIngredients();
+      //Calc servings and time
+      state.recipe.calcTime();
+      state.recipe.calcServings();
+      //Render the recipe
+      clearLoader();
+      recipeView.renderRecipe(state.recipe);
+    } catch (err) {
+      alert("Error processing recipe");
+      console.log(err);
+    }
+  }
+};
+
+["hashchange", "load"].forEach((event) =>
+  window.addEventListener(event, controlRecipe)
+);
+
+// Handling Recipe Button Clicks
+elements.recipe.addEventListener("click", (e) => {
+  if (state.recipe.servings > 1) {
+    if (e.target.matches(".btn-decrease,.btn-decrease *")) {
+      state.recipe.updateServings("dec");
+      recipeView.updateServingsIngredients(state.recipe);
+    }
+  }
+  if (e.target.matches(".btn-increase,.btn-increase *")) {
+    state.recipe.updateServings("inc");
+    recipeView.updateServingsIngredients(state.recipe);
+  }
+});
