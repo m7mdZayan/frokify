@@ -11,6 +11,15 @@ export const clearResults = () => {
   elements.searchresPages.innerHTML = "";
 };
 
+export const highlightSelected = (id) => {
+  const resultsArr = Array.from(document.querySelectorAll(".likes__link"));
+  resultsArr.forEach((el) => el.classList.remove("results__link--active"));
+
+  document
+    .querySelector(`a[href="#${id}"]`)
+    .classList.add("results__link--active");
+};
+
 const limitRecipeTitle = (title, limit = 20) => {
   const newTitle = [];
   if (title.length > 17) {
@@ -27,7 +36,7 @@ const limitRecipeTitle = (title, limit = 20) => {
   return title;
 };
 
-export const renderRecipe = recipe => {
+export const renderRecipe = (recipe) => {
   const markup = `<li>
 <a class="likes__link" href="#${recipe.recipe_id}">
     <figure class="likes__fig">
