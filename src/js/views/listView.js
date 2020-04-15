@@ -18,6 +18,6 @@ export const renderItem = (item) => {
 };
 
 export const deleteItem = (id) => {
-  const item = document.querySelector(`[data-itemId="${id}]"`);
-  item.parentNode.removeChild(item);
+  const item = document.querySelector(`[data-itemid="${id}"]`);
+  if (item) item.parentNode.removeChild(item);
 };
