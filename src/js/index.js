@@ -183,3 +183,11 @@ const controlLike = () => {
   }
   likesView.toggleLikeMenu(state.likes.getNumLikes());
 };
+
+// Restore liked recipes on page load
+window.addEventListener("load", () => {
+  state.likes.readStorage();
+  console.log(state.likes);
+  likesView.toggleLikeMenu(state.likes.getNumLikes());
+  state.likes.likes.forEach((like) => likesView.renderLike(like));
+});
