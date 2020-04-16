@@ -18,9 +18,6 @@ import Likes from "./models/Likes";
  */
 const state = {};
 
-// Testing
-
-window.state = state;
 state.likes = new Likes();
 likesView.toggleLikeMenu(state.likes.getNumLikes());
 
